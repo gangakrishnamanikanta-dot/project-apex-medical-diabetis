@@ -7,6 +7,7 @@
 **Track:** Capstone Project — Theme 1: Healthcare  
 **Dataset:** Pima Indians Diabetes Diagnostic Dataset (768 patients)  
 **Deliverable:** 4-Model Comparative Analysis, Hyperparameter Tuning, and Clinical Web Dashboard  
+**GitHub Repository:** [https://github.com/gangakrishnamanikanta-dot/project-apex-medical-diabetis](https://github.com/gangakrishnamanikanta-dot/project-apex-medical-diabetis)  
 
 ---
 
@@ -199,6 +200,7 @@ The application opens in your web browser at `http://localhost:8501`.
 - [x] **Feature Importance chart** (`results/feature_importance.png`)
 - [x] **Best model justification** (`results/final_recommendation.txt`)
 - [x] **4 Independent team member scripts** (`model1` through `model4`)
+- [x] **GitHub Repository:** [https://github.com/gangakrishnamanikanta-dot/project-apex-medical-diabetis](https://github.com/gangakrishnamanikanta-dot/project-apex-medical-diabetis)
 - [x] ⭐ **Bonus 1:** Hyperparameter tuning via `GridSearchCV`
 - [x] ⭐ **Bonus 2:** 5-fold Stratified Cross-Validation
 - [x] ⭐ **Bonus 3:** Interactive Streamlit Web App Demo
