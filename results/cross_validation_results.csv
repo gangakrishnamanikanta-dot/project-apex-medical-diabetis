@@ -1,5 +1,5 @@
 Model,CV Mean Accuracy,CV Std Dev,Fold 1,Fold 2,Fold 3,Fold 4,Fold 5
-Logistic Regression,0.7866,0.0127,0.7886,0.7886,0.7967,0.7967,0.7623
-Polynomial Logistic (deg=2),0.7817,0.0145,0.7886,0.7724,0.8049,0.7805,0.7623
+Logistic Regression,0.7882,0.0133,0.7967,0.7886,0.7967,0.7967,0.7623
+Polynomial Logistic (deg=2),0.785,0.0136,0.7967,0.7724,0.8049,0.7805,0.7705
 Decision Tree (Tuned),0.7182,0.0293,0.7642,0.6911,0.7317,0.6829,0.7213
-Random Forest (Tuned),0.7752,0.0225,0.7886,0.7561,0.813,0.7642,0.7541
+Random Forest (Tuned),0.7785,0.0142,0.7805,0.7724,0.8049,0.7642,0.7705
