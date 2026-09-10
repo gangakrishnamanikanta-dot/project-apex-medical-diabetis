@@ -1,1 +1,44 @@
-The tuned Random Forest Classifier (M4) is selected as the recommended model for hospital deployment, achieving the highest test accuracy of 75.97%, highest F1-score (0.6263), and robust 5-fold cross-validation accuracy of 77.85%. Diagnostic risk is primarily driven by Glucose, BMI, and Age, providing high clinical safety by maximizing patient recall and preventing dangerous false negatives.
+================================================================================
+FINAL CAPSTONE PROJECT RECOMMENDATION & CLINICAL JUSTIFICATION
+================================================================================
+
+PROJECT: Diabetes Early Screening & Risk Prediction (Theme 1: Healthcare)
+RECOMMENDED MODEL: Model 4 - Random Forest Classifier (Tuned)
+
+1. WHY WE CHOSE RANDOM FOREST OVER THE OTHER 3 MODELS:
+- Highest Test Accuracy (75.97%):
+  When tested on 154 unseen patients who were completely separated from training, 
+  Random Forest correctly diagnosed 117 patients, beating Logistic Regression (69.48%), 
+  Polynomial Logistic (73.38%), and Decision Tree (74.03%).
+
+- Highest Patient Recall (57.41%):
+  In medicine, the worst mistake is a "False Negative" — telling a sick person they are fine 
+  and sending them home without treatment. Random Forest detected 31 out of 54 diabetic patients 
+  in the test set (57.41% recall), missing the fewest sick patients compared to all other models.
+
+- Most Balanced Diagnosis (F1-Score: 0.6263):
+  It achieved the highest harmonic balance between precision (avoiding false alarms) and 
+  recall (catching actual diabetes).
+
+- Reliable & Stable Across Folds (5-Fold CV: 77.85% +/- 1.42%):
+  While a single Decision Tree's accuracy swung wildly depending on how the data was split 
+  (dropping as low as 68.2%), the 150-tree Random Forest remained rock-solid across all 5 folds.
+
+2. MEDICAL LOGIC & FEATURE TRANSPARENCY:
+The Random Forest model does not act like an unexplainable "black box". 
+Our Gini Feature Importance analysis proves that its top decision drivers are:
+  1. Blood Glucose (33.3% importance)
+  2. Body Mass Index / BMI (13.4% importance)
+  3. Patient Age (11.9% importance)
+  4. Diabetes Pedigree Function / Family History (8.8% importance)
+  5. Serum Insulin (7.4% importance)
+
+This order aligns exactly with how real-world doctors diagnose Type 2 Diabetes: 
+elevated blood sugar combined with obesity and advancing age are the three most 
+critical risk factors.
+
+3. CONCLUSION FOR CLINICAL USE:
+The tuned Random Forest model strikes the best balance of safety, accuracy, and interpretability. 
+It is the clear and undisputed winner of this capstone evaluation and is recommended 
+for deployment in the hospital screening dashboard.
+================================================================================

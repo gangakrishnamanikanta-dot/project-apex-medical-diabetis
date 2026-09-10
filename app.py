@@ -161,19 +161,19 @@ except Exception as e:
 # Top Header
 st.markdown("""
 <div class="app-header">
-    <div class="hospital-badge">Hospital Clinical Decision Support System</div>
-    <div class="app-title">🏥 MediScan AI Diagnostic Portal</div>
-    <div class="app-subtitle">Early Diabetes Screening & Risk Stratification Platform</div>
+    <div class="hospital-badge">Smart Healthcare Assistant</div>
+    <div class="app-title">🏥 MediScan AI: Diabetes Risk Screening Portal</div>
+    <div class="app-subtitle">A simple, reliable tool to help doctors and patients detect early signs of Type 2 Diabetes</div>
 </div>
 """, unsafe_allow_html=True)
 
 # Portal Navigation: Clean Separation between Clinical Patient Use & Capstone Audit
 portal_mode = st.radio(
-    "Select System Mode:",
-    ["🩺 Patient Diagnostic Portal", "📊 Model Performance & Capstone Audit (For Evaluators)"],
+    "Choose What You Want to Do:",
+    ["🩺 Check a Patient (Diagnostic Portal)", "📊 View Model Results & Project Audit (For Evaluators)"],
     index=0,
     horizontal=True,
-    help="Switch between clinical patient diagnosis and technical evaluation."
+    help="Switch between checking an individual patient or reviewing the project's machine learning charts and accuracy scores."
 )
 
 st.write("")
@@ -181,13 +181,14 @@ st.write("")
 # ==============================================================================
 # MODE 1: PROFESSIONAL PATIENT DIAGNOSTIC PORTAL (CLEAN, NO CLUTTER)
 # ==============================================================================
-if portal_mode == "🩺 Patient Diagnostic Portal":
+if portal_mode == "🩺 Check a Patient (Diagnostic Portal)":
 
     # Preset Patient Profiles for quick demo in viva/presentation
-    st.sidebar.markdown("### ⚡ Quick Patient Presets")
+    st.sidebar.markdown("### ⚡ Quick Test Profiles")
+    st.sidebar.caption("Click either button to automatically fill in sample patient values:")
     col_pre1, col_pre2 = st.sidebar.columns(2)
-    load_healthy = col_pre1.button("🟢 Normal", help="Load normal healthy biomarker values")
-    load_diabetic = col_pre2.button("🔴 High-Risk", help="Load elevated diabetic biomarker values")
+    load_healthy = col_pre1.button("🟢 Normal", help="Loads a healthy, non-diabetic patient profile")
+    load_diabetic = col_pre2.button("🔴 High-Risk", help="Loads an elevated diabetic patient profile")
 
     # Handle preset state
     if "preset_data" not in st.session_state:
@@ -212,9 +213,9 @@ if portal_mode == "🩺 Patient Diagnostic Portal":
 
     # Sidebar: Patient Demographics & Diagnostics
     with st.sidebar:
-        st.markdown("### 📋 Patient Demographics")
+        st.markdown("### 📋 Patient Details")
         gender = st.radio(
-            "Patient Gender",
+            "Gender",
             ["Female", "Male"],
             index=0 if st.session_state.preset_data["gender"] == "Female" else 1,
             horizontal=True
@@ -225,7 +226,7 @@ if portal_mode == "🩺 Patient Diagnostic Portal":
             pregnancies = 0
             st.markdown("""
             <div class="gender-lock">
-                🔒 <strong>Pregnancies: 0</strong> (Not applicable for male patients)
+                🔒 <strong>Pregnancies: 0</strong> (Automatically disabled for male patients)
             </div>
             """, unsafe_allow_html=True)
         else:
@@ -234,19 +235,20 @@ if portal_mode == "🩺 Patient Diagnostic Portal":
                 min_value=0, max_value=20,
                 value=int(st.session_state.preset_data["preg"]),
                 step=1,
-                help="Number of times pregnant (gestational history factor)."
+                help="Number of times pregnant (gestational history)."
             )
 
         age = st.number_input(
             "Age (years)",
             min_value=18, max_value=120,
             value=int(st.session_state.preset_data["age"]),
-            step=1
+            step=1,
+            help="Patient age in years."
         )
 
         st.markdown("---")
-        st.markdown("### 🧪 Diagnostic Vitals & Lab Panel")
-        st.caption("Enter clinical test results. Unknown values left at 0 will automatically fall back to reference medians.")
+        st.markdown("### 🧪 Medical Tests & Vitals")
+        st.caption("Enter patient lab test numbers below. If a test wasn't performed (e.g. Insulin), leaving it at 0 will automatically use the standard population average.")
 
         glucose = st.number_input(
             "Plasma Glucose (2h Oral Test, mg/dL)",
@@ -364,22 +366,22 @@ if portal_mode == "🩺 Patient Diagnostic Portal":
     col_left, col_right = st.columns([1.15, 1.0], gap="large")
 
     with col_left:
-        st.markdown("### 🩺 Diagnostic Assessment Result")
+        st.markdown("### 🩺 Screening Result")
 
         if prediction == 1:
             st.markdown(f"""
             <div class="risk-banner-high">
                 <div style="font-size:0.85rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#b91c1c;">
-                    Screening Status: Abnormal Finding
+                    ⚠️ Screening Alert: Higher Risk Detected
                 </div>
                 <h2 style="margin: 0.3rem 0; font-size:1.8rem; font-weight:800; color:#991b1b;">
-                    ⚠️ High Risk of Type 2 Diabetes
+                    Elevated Risk of Type 2 Diabetes
                 </h2>
                 <div style="font-size:1.15rem; font-weight:600; margin-top:0.4rem; color:#7f1d1d;">
-                    Calculated Diabetic Probability: <strong>{diabetic_risk * 100:.1f}%</strong>
+                    Calculated Risk Score: <strong>{diabetic_risk * 100:.1f}%</strong>
                 </div>
-                <p style="margin:0.5rem 0 0 0; font-size:0.92rem; color:#991b1b; line-height:1.5;">
-                    The patient's glycemic indicators and physiological metrics exceed standard diagnostic thresholds. Confirmatory venous plasma screening is strongly recommended.
+                <p style="margin:0.5rem 0 0 0; font-size:0.95rem; color:#991b1b; line-height:1.5;">
+                    The patient's blood glucose, BMI, or other vitals are noticeably higher than normal healthy ranges. We strongly recommend scheduling a confirmatory blood test (such as HbA1c or Fasting Blood Sugar) with a doctor soon.
                 </p>
             </div>
             """, unsafe_allow_html=True)
@@ -387,49 +389,49 @@ if portal_mode == "🩺 Patient Diagnostic Portal":
             st.markdown(f"""
             <div class="risk-banner-low">
                 <div style="font-size:0.85rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#047857;">
-                    Screening Status: Normal Diagnostic Range
+                    ✅ Good News: Normal Healthy Range
                 </div>
                 <h2 style="margin: 0.3rem 0; font-size:1.8rem; font-weight:800; color:#065f46;">
-                    ✅ Low Risk / Non-Diabetic Profile
+                    Low Risk / Non-Diabetic
                 </h2>
                 <div style="font-size:1.15rem; font-weight:600; margin-top:0.4rem; color:#064e3b;">
-                    Healthy Confidence Level: <strong>{healthy_confidence * 100:.1f}%</strong>
+                    Healthy Likelihood: <strong>{healthy_confidence * 100:.1f}%</strong>
                 </div>
-                <p style="margin:0.5rem 0 0 0; font-size:0.92rem; color:#065f46; line-height:1.5;">
-                    Current physiological measurements indicate normal metabolic regulation. Routine annual wellness monitoring advised.
+                <p style="margin:0.5rem 0 0 0; font-size:0.95rem; color:#065f46; line-height:1.5;">
+                    The patient's readings look healthy and are within the normal expected ranges. Continuing regular exercise, a balanced diet, and standard annual checkups is recommended.
                 </p>
             </div>
             """, unsafe_allow_html=True)
 
         # Visual Risk Probability Progress Bar
-        st.markdown(f"**Clinical Risk Stratification Bar ({diabetic_risk*100:.1f}% Risk):**")
+        st.markdown(f"**Risk Level Meter ({diabetic_risk*100:.1f}% Risk):**")
         st.progress(diabetic_risk)
 
         col_m1, col_m2 = st.columns(2)
-        col_m1.metric("Estimated Diabetic Risk", f"{diabetic_risk * 100:.1f}%")
-        col_m2.metric("Non-Diabetic Likelihood", f"{healthy_confidence * 100:.1f}%")
+        col_m1.metric("Diabetes Risk", f"{diabetic_risk * 100:.1f}%")
+        col_m2.metric("Healthy Likelihood", f"{healthy_confidence * 100:.1f}%")
 
         if imputed_fields:
-            st.caption("ℹ️ **Reference Fallback Applied:** " + ", ".join(imputed_fields))
+            st.caption("ℹ️ **Note:** Since some tests were left as 0, standard population averages were safely used for: " + ", ".join(imputed_fields))
 
-        # Actionable Clinical Recommendations
-        st.markdown("### 📋 Recommended Clinical Action Plan")
+        # Actionable Clinical Recommendations in human language
+        st.markdown("### 💡 Recommended Next Steps")
         if prediction == 1:
             st.markdown("""
             <div class="advice-box">
-                <strong>Recommended Next Steps:</strong><br>
-                1. <strong>Confirmatory Lab:</strong> Schedule Fasting Blood Glucose (FBG) and Glycated Hemoglobin (HbA1c) diagnostic test within 14 days.<br>
-                2. <strong>Nutritional Referral:</strong> Initiate medical nutrition therapy focused on complex low-glycemic index carbohydrates and caloric restriction.<br>
-                3. <strong>Cardiometabolic Care:</strong> Screen for concurrent hypertension and microvascular markers (urine albumin-to-creatinine ratio).
+                <strong>What to do next:</strong><br>
+                1. <strong>Confirm with a lab test:</strong> Get an HbA1c or Fasting Plasma Glucose test done at an authorized clinic within the next 2 weeks.<br>
+                2. <strong>Dietary changes:</strong> Cut down on sugary drinks, refined carbs, and processed snacks. Focus on fresh vegetables, fiber, and whole foods.<br>
+                3. <strong>Doctor consultation:</strong> Schedule an appointment with a general physician to review blood pressure, heart health, and personalized lifestyle advice.
             </div>
             """, unsafe_allow_html=True)
         else:
             st.markdown("""
             <div class="advice-box">
-                <strong>Preventive Maintenance Guidance:</strong><br>
-                1. <strong>Routine Health Screen:</strong> Re-evaluate blood glucose during standard annual health checkup.<br>
-                2. <strong>Physical Activity:</strong> Maintain 150 minutes of moderate aerobic exercise weekly (e.g. brisk walking, cycling).<br>
-                3. <strong>Weight Stability:</strong> Aim to maintain BMI within the normal 18.5 - 24.9 kg/m² reference range.
+                <strong>Tips to stay healthy:</strong><br>
+                1. <strong>Keep moving:</strong> Aim for at least 30 minutes of moderate activity (like brisk walking, jogging, or cycling) 5 days a week.<br>
+                2. <strong>Balanced meals:</strong> Drink plenty of water and eat meals with a good mix of vegetables, lean proteins, and whole grains.<br>
+                3. <strong>Yearly checkup:</strong> Get your blood sugar and vitals checked once a year during a regular health screening.
             </div>
             """, unsafe_allow_html=True)
 
@@ -492,27 +494,34 @@ This tool is for clinical screening assistance and does not replace certified ph
         )
 
 # ==============================================================================
-# MODE 2: CAPSTONE AUDIT & TECHNICAL BENCHMARKS (FOR PROFESSORS / EVALUATORS)
+# MODE 2: PROJECT RESULTS & MODEL AUDIT (FOR PROFESSORS & EVALUATORS)
 # ==============================================================================
 else:
     st.markdown("""
-    <div style="background:#f8fafc; padding:1.2rem; border-radius:12px; border:1px solid #cbd5e1; margin-bottom:1.5rem;">
-        <h3 style="margin:0; color:#0f172a;">📊 Capstone Evaluation & Machine Learning Benchmarks</h3>
-        <p style="margin:0.3rem 0 0 0; color:#64748b; font-size:0.95rem;">
-            This technical section contains all deliverables required by the Capstone Project specifications (Theme 1: Healthcare):
-            4-model benchmarks, 5-fold cross-validation, confusion matrices, feature importances, and exploratory data analysis.
+    <div style="background:#f8fafc; padding:1.4rem; border-radius:12px; border:1px solid #cbd5e1; margin-bottom:1.5rem;">
+        <h3 style="margin:0; color:#0f172a;">📊 Capstone Project Results & Model Evidence</h3>
+        <p style="margin:0.4rem 0 0 0; color:#475569; font-size:0.95rem; line-height:1.5;">
+            Here is the complete technical evidence from our capstone project. We trained and evaluated 4 different machine learning models 
+            on the exact same 154 patients who were completely unseen during training. You can explore the accuracy comparisons, 
+            the winning Random Forest confusion matrix, biomarker rankings, and our exploratory data analysis charts below.
         </p>
     </div>
     """, unsafe_allow_html=True)
 
     tab_eval, tab_feat, tab_eda_view = st.tabs([
-        "📈 4-Model Benchmark & Comparison",
-        "🌲 Biomarker Feature Importance",
-        "🔬 Exploratory Data Analysis (EDA Gallery)"
+        "📈 How All 4 Models Compare",
+        "🌲 What Features Matter Most? (Biomarker Importance)",
+        "🔬 Exploratory Data Analysis (5 Key Charts)"
     ])
 
     with tab_eval:
-        st.subheader("1. Performance Comparison on 80:20 Unseen Test Split (154 Patients)")
+        st.subheader("1. Test Results on 154 Unseen Patients (20% Test Split)")
+        st.info("""
+        **💡 How to read this table:**
+        - **Test Accuracy:** How many total patients did the model diagnose correctly out of 100? **Model 4 (Random Forest) is the winner at 75.97%**.
+        - **Test Recall (Most Important in Medicine):** Out of 100 people who actually have diabetes, how many did the model detect? Random Forest scored the highest (**57.41%**), meaning it misses the fewest sick patients.
+        - **F1-Score:** The harmonic balance between precision and recall. Random Forest leads with **0.6263**.
+        """)
         st.dataframe(
             comp_df.style.format({
                 "Test Accuracy": "{:.2%}",
@@ -523,7 +532,8 @@ else:
             width="stretch"
         )
 
-        st.subheader("2. 5-Fold Stratified Cross-Validation Generalization Scores")
+        st.subheader("2. 5-Fold Cross-Validation (Checking Consistency Across 5 Splits)")
+        st.caption("Cross-validation splits the data 5 different ways to prove the models didn't just get lucky on one test set:")
         st.dataframe(
             cv_df.style.format({
                 "CV Mean Accuracy": "{:.2%}",
@@ -537,21 +547,55 @@ else:
             width="stretch"
         )
 
-        st.subheader("3. Confusion Matrix: Random Forest Winning Architecture")
-        st.image(os.path.join(RESULTS_DIR, "confusion_matrix_best_model.png"), caption="Confusion Matrix on 154 Test Patients (86 TN, 31 TP, 14 FP, 23 FN)", width=460)
+        st.subheader("3. Confusion Matrix: Where Did the Winning Random Forest Model Get It Right?")
+        col_cm_img, col_cm_desc = st.columns([1.1, 1.0], gap="medium")
+        with col_cm_img:
+            st.image(os.path.join(RESULTS_DIR, "confusion_matrix_best_model.png"), caption="Confusion Matrix on 154 Unseen Test Patients", width=440)
+        with col_cm_desc:
+            st.markdown("""
+            **What this matrix tells us:**
+            - **86 True Negatives (Top-Left):** 86 healthy patients were correctly diagnosed as healthy.
+            - **31 True Positives (Bottom-Right):** 31 diabetic patients were correctly flagged as having diabetes.
+            - **14 False Positives (Top-Right):** 14 healthy patients were flagged for a checkup (safe false alarm).
+            - **23 False Negatives (Bottom-Left):** 23 diabetic patients were missed (this is the lowest missed rate among all models).
+            
+            *Overall, the Random Forest correctly diagnosed 117 out of 154 patients (75.97%).*
+            """)
 
     with tab_feat:
-        st.subheader("Key Diagnostic Biomarkers (Gini Feature Importance)")
-        st.write("Identifies the clinical weight of each biomarker in predicting diabetes onset:")
-        st.image(os.path.join(RESULTS_DIR, "feature_importance.png"), caption="Biomarker Gini Importance Ranking (Glucose, BMI, and Age are primary drivers)", width="stretch")
+        st.subheader("Which Biomarkers Drive the Diabetes Diagnosis?")
+        st.info("""
+        **💡 What this chart means:**
+        This bar chart reveals which clinical measurements our Random Forest model relies on the most.
+        - **Glucose is #1 (33.3% importance):** Blood sugar is the direct hallmark of diabetes, so it's reassuring that the algorithm naturally prioritizes it.
+        - **BMI is #2 (13.4% importance):** Higher body weight and obesity directly contribute to insulin resistance.
+        - **Age is #3 (11.9% importance):** Risk increases steadily as patients grow older.
+        """)
+        st.image(os.path.join(RESULTS_DIR, "feature_importance.png"), caption="Feature Importance Ranking (Glucose, BMI, and Age are the top 3 drivers)", width="stretch")
 
     with tab_eda_view:
-        st.subheader("Project Exploratory Visualizations (Mandatory 5 Visualizations)")
+        st.subheader("Exploratory Data Analysis: What Did We Learn from the Patient Data?")
+        st.caption("Here are the 5 core charts we used to inspect patient patterns and clean the data before training:")
+        
         c1, c2 = st.columns(2)
         with c1:
-            st.image(os.path.join(RESULTS_DIR, "eda_1_correlation_heatmap.png"), caption="EDA 1: Feature Correlation Heatmap")
-            st.image(os.path.join(RESULTS_DIR, "eda_3_feature_distributions_by_outcome.png"), caption="EDA 3: Biomarker Distributions Split by Outcome")
-            st.image(os.path.join(RESULTS_DIR, "eda_5_pairplot.png"), caption="EDA 5: Pairplot of Correlated Diagnostic Biomarkers")
+            st.markdown("#### 1. Correlation Heatmap")
+            st.caption("Shows how measurements relate to diabetes. Glucose has the strongest correlation (+0.49).")
+            st.image(os.path.join(RESULTS_DIR, "eda_1_correlation_heatmap.png"), caption="Correlation Matrix Heatmap")
+            
+            st.markdown("#### 3. Patient Vitals Comparison")
+            st.caption("Orange curves (diabetic) are clearly shifted to the right towards higher glucose, BMI, and age.")
+            st.image(os.path.join(RESULTS_DIR, "eda_3_feature_distributions_by_outcome.png"), caption="Distributions by Outcome (Healthy vs Diabetic)")
+            
+            st.markdown("#### 5. Biomarker Pairplot")
+            st.caption("Shows how pairs of biomarkers interact. Notice how high glucose and high BMI cluster together for diabetic patients.")
+            st.image(os.path.join(RESULTS_DIR, "eda_5_pairplot.png"), caption="Pairplot of Key Biomarkers")
+        
         with c2:
-            st.image(os.path.join(RESULTS_DIR, "eda_2_class_distribution.png"), caption="EDA 2: Outcome Class Distribution (65% Healthy vs 35% Diabetic)")
-            st.image(os.path.join(RESULTS_DIR, "eda_4_outlier_boxplots.png"), caption="EDA 4: Outlier and Zero Detection Boxplots")
+            st.markdown("#### 2. Class Balance in the Dataset")
+            st.caption("65% of patients in this dataset are healthy (500) and 35% are diabetic (268).")
+            st.image(os.path.join(RESULTS_DIR, "eda_2_class_distribution.png"), caption="Class Distribution: 500 Healthy vs 268 Diabetic")
+            
+            st.markdown("#### 4. Outlier & Zero-Value Detection")
+            st.caption("Demonstrates the impossible 0 values (e.g. 0 blood pressure or 0 glucose) that we had to fix with medians.")
+            st.image(os.path.join(RESULTS_DIR, "eda_4_outlier_boxplots.png"), caption="Outlier and Zero Detection Boxplots")
